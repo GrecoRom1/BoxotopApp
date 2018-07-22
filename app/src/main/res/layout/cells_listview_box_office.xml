@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="120dp"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="5dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:id="@+id/background_listview">
 
         <ImageView
             android:id="@+id/imageview_listview_poster"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true" />
+            android:layout_width="80dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
 
         <TextView
             android:id="@+id/textview_listview_movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/imageview_listview_poster"
-            android:textAlignment="center" />
+            android:layout_alignBaseline="@id/imageview_listview_poster"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

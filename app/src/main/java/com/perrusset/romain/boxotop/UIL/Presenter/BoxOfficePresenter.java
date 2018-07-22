@@ -47,12 +47,10 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
 
     private void initPresenter() {
         moviesList = new ArrayList<Movie>();
-        page=0;
+        page=1;
 
         //Todo load the data
-        GetPopularMovie(1);
-
-
+        GetPopularMovie(page);
     }
 
     public void GetPopularMovie(int page)
@@ -85,7 +83,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         ArrayList<Movie> a = new ArrayList<Movie>();
         a = noticeArrayList;
 
-        _view.notifiyPresenterReady();
+        _view.notifyPresenterReady(a);
     }
 
 

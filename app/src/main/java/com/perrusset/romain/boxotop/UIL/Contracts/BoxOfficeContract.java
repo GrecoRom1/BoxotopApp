@@ -1,9 +1,13 @@
 package com.perrusset.romain.boxotop.UIL.Contracts;
 
+import com.perrusset.romain.boxotop.UIL.Movie;
+
+import java.util.ArrayList;
+
 public interface BoxOfficeContract extends BaseContract {
 
     interface View<T extends Presenter> extends BaseContract.View {
-        void notifiyPresenterReady();
+        void notifyPresenterReady(ArrayList<Movie> movies);
         void notifyDataLoaded();
         void startNextActivity(int movieID);
     }
