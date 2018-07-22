@@ -2,52 +2,28 @@ package com.perrusset.romain.boxotop.UIL;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-import java.util.List;
-
 public class Movie {
 
     @SerializedName("id")
     public int id;
 
-    @SerializedName("Title")
+    @SerializedName("title")
     public String title;
 
-    @SerializedName("Year")
-    public int year;
+    @SerializedName("original_title")
+    public String originalTitle;
 
-    @SerializedName("Released")
-    public Date releaseDate;
+    @SerializedName("release_date")
+    public String releaseDate;
 
-    @SerializedName("Runtime")
-    public int runTime;
-
-    @SerializedName("Genre")
-    public String genre;
-
-    @SerializedName("Director")
-    public String director;
-
-    @SerializedName("Writer")
-    public String writer;
-
-    @SerializedName("Language")
-    public String language;
-
-    @SerializedName("Country")
-    public String country;
-
-    @SerializedName("Actors")
-    public String actors;
-
-    @SerializedName("Poster")
-    public String urlPoster;
-
-    @SerializedName("Plot")
+    @SerializedName("overview")
     public String synopsis;
 
-    @SerializedName("Ratings")
-    public List<Rating> ratingList;
+    @SerializedName("vote_average")
+    public String vote;
+
+    @SerializedName("poster_path")
+    public String posterPath;
 
     public Movie(){
 

@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class MovieList {
 
-    @SerializedName("movie_list")
-    private ArrayList<Movie> noticeList;
+    @SerializedName("results")
+    private ArrayList<Movie> movieList;
 
     public ArrayList<Movie> getNoticeArrayList() {
-        return noticeList;
+        return movieList;
     }
 
     public void setNoticeArrayList(ArrayList<Movie> noticeArrayList) {
-        this.noticeList = noticeArrayList;
+        this.movieList = noticeArrayList;
     }
 }
