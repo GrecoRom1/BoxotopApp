@@ -9,11 +9,11 @@ public class MovieList {
     @SerializedName("results")
     private ArrayList<Movie> movieList;
 
-    public ArrayList<Movie> getNoticeArrayList() {
+    public ArrayList<Movie> getMovieArrayList() {
         return movieList;
     }
 
-    public void setNoticeArrayList(ArrayList<Movie> noticeArrayList) {
+    public void setMovieArrayList(ArrayList<Movie> noticeArrayList) {
         this.movieList = noticeArrayList;
     }
 }

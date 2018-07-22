@@ -20,12 +20,20 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
 
     private BoxOfficeContract.View _view;
 
-    private  ArrayList<Movie> moviesList;
+    private ArrayList<Movie> moviesList;
 
-    int page;
+    private boolean IsSearchablePresenter = false;
+
+    private int page;
 
     public BoxOfficePresenter(Context c) {
         super(c);
+    }
+
+    public BoxOfficePresenter(Context c, ArrayList<Movie> data) {
+        super(c);
+        IsSearchablePresenter = true;
+        moviesList = data;
     }
 
     @Override
@@ -46,15 +54,18 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
 
 
     private void initPresenter() {
-        moviesList = new ArrayList<Movie>();
-        page=1;
+        page = 1;
+        if (IsSearchablePresenter==true) {
+            _view.notifyPresenterReady(moviesList);
+        } else {
+            //Todo load the data
+            moviesList = new ArrayList<Movie>();
+            GetPopularMovie(page);
+        }
 
-        //Todo load the data
-        GetPopularMovie(page);
     }
 
-    public void GetPopularMovie(int page)
-    {
+    public void GetPopularMovie(int page) {
         /** Create handle for the RetrofitInstance interface*/
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
 
@@ -67,7 +78,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                generateNoticeList(response.body().getNoticeArrayList());
+                generateNoticeList(response.body().getMovieArrayList());
             }
 
             @Override
@@ -77,7 +88,9 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         });
     }
 
-    /** Method to generate List of notice using RecyclerView with custom adapter*/
+    /**
+     * Method to generate List of notice using RecyclerView with custom adapter
+     */
     private void generateNoticeList(ArrayList<Movie> noticeArrayList) {
 
         ArrayList<Movie> a = new ArrayList<Movie>();

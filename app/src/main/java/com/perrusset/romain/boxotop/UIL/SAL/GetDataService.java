@@ -12,4 +12,8 @@ public interface GetDataService {
 
     @GET("/3/movie/popular"+apiKey)
     Call<MovieList> getPopularMovie(@Query("page") int pageNumber);
+
+    @GET("/3/search/movie"+apiKey)
+    Call<MovieList> getMovieFromSearch(@Query("query") String search, @Query("page")
+            int pageNumber);
 }
