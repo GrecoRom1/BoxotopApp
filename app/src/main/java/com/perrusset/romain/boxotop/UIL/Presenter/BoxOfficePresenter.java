@@ -1,45 +1,66 @@
 package com.perrusset.romain.boxotop.UIL.Presenter;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.perrusset.romain.boxotop.UIL.Contracts.BaseContract;
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
 import com.perrusset.romain.boxotop.UIL.Movie;
-import com.perrusset.romain.boxotop.UIL.MovieList;
-import com.perrusset.romain.boxotop.UIL.SAL.GetDataService;
-import com.perrusset.romain.boxotop.UIL.SAL.RetrofitClientInstance;
+import com.perrusset.romain.boxotop.UIL.SAL.CallbackMoviesAPI;
+import com.perrusset.romain.boxotop.UIL.SAL.ErrorMoviesAPIEnum;
+import com.perrusset.romain.boxotop.UIL.SAL.MoviesAPI;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContract.Presenter {
+public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContract.Presenter, CallbackMoviesAPI {
 
     private BoxOfficeContract.View _view;
+    private ArrayList<Movie> boxOfficeList;
+    private int positionInBoxOfficeList;
 
-    private ArrayList<Movie> moviesList;
 
-    private boolean IsSearchablePresenter = false;
+    private MoviesAPI _moviesAPI;
 
-    private int page;
+    private boolean isOnSearch;
+    private boolean isInitialized;
 
-    public BoxOfficePresenter(Context c) {
+    private String searchValue;
+
+    private int pageBoxOffice;
+    private int pageSearch;
+
+    public BoxOfficePresenter(Context c, BoxOfficeContract.View view) {
         super(c);
-    }
-
-    public BoxOfficePresenter(Context c, ArrayList<Movie> data) {
-        super(c);
-        IsSearchablePresenter = true;
-        moviesList = data;
+        _view = view;
+        isOnSearch = false;
+        isInitialized = false;
     }
 
     @Override
-    public void loadMoreData() {
-
+    public void start() {
+        if (!isInitialized) {
+            isInitialized = true;
+            positionInBoxOfficeList = 0;
+            _moviesAPI = new MoviesAPI();
+            onRefresh();
+        }
     }
+
+
+    @Override
+    public void onRefresh() {
+        pageBoxOffice = 1;
+        _moviesAPI.getPopularMovie(pageBoxOffice, this);
+    }
+
+    @Override
+    public void onLoadMoreData() {
+
+        if (isOnSearch) {
+            loadMoreSearch();
+        } else {
+            loadMoreBoxOffice();
+        }
+    }
+
 
     @Override
     public void movieCardClicked(int movieID) {
@@ -47,45 +68,25 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     }
 
     @Override
-    public void start(BaseContract.View View) {
-        _view = (BoxOfficeContract.View) View;
-        initPresenter();
-    }
+    public void onSearch(String query) {
+        pageSearch = 1;
+        searchValue = query;
+        isOnSearch = true;
+        _view.clearList();
 
-
-    private void initPresenter() {
-        page = 1;
-        if (IsSearchablePresenter==true) {
-            _view.notifyPresenterReady(moviesList);
-        } else {
-            //Todo load the data
-            moviesList = new ArrayList<Movie>();
-            GetPopularMovie(page);
+        if(!query.equals("")){
+            _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
         }
-
     }
 
-    public void GetPopularMovie(int page) {
-        /** Create handle for the RetrofitInstance interface*/
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+    private void loadMoreBoxOffice() {
+        pageBoxOffice++;
+        _moviesAPI.getPopularMovie(pageBoxOffice, this);
+    }
 
-        /** Call the method with parameter in the interface to get the notice data*/
-        Call<MovieList> call = service.getPopularMovie(page);
-
-        /**Log the URL called*/
-        Log.wtf("URL Called", call.request().url() + "");
-
-        call.enqueue(new Callback<MovieList>() {
-            @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                generateNoticeList(response.body().getMovieArrayList());
-            }
-
-            @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
-                //Toast.makeText(MainActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void loadMoreSearch() {
+        pageSearch++;
+        _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
     }
 
     /**
@@ -99,5 +100,42 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         _view.notifyPresenterReady(a);
     }
 
+    @Override
+    public void onSearchClosed() {
+        isOnSearch = false;
+        pageSearch = 0;
+        _view.clearList();
+        _view.addList(boxOfficeList);
+    }
 
+    @Override
+    public void OnResultBoxOffice(ArrayList<Movie> result, int page) {
+
+        if (result.size() == 0) {
+            _view.setListFull();
+        } else {
+            if(page<2){
+                _view.notifyDataRefreshed();
+            }
+            _view.addList(result);
+            _view.setListNotFull();
+            boxOfficeList.addAll(result);
+        }
+    }
+
+    @Override
+    public void OnResultSearch(ArrayList<Movie> result, int page) {
+        if (result.size() == 0) {
+            _view.setListFull();
+        } else {
+            _view.addList(result);
+            _view.setListNotFull();
+            boxOfficeList.addAll(result);
+        }
+    }
+
+    @Override
+    public void OnError(ErrorMoviesAPIEnum error) {
+
+    }
 }

@@ -7,7 +7,7 @@ public interface BaseContract {
         void setPresenter(T presenter);
     }
 
-    interface Presenter<I extends View> {
-        void start(I View);
+    interface Presenter {
+        void start();
     }
 }
