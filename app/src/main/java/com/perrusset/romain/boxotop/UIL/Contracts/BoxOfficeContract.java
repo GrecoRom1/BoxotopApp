@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public interface BoxOfficeContract extends BaseContract {
 
     interface View<T extends Presenter> extends BaseContract.View {
-        void notifyPresenterReady(ArrayList<Movie> movies);
         void notifyDataLoaded();
         void notifyDataRefreshed();
         void addList(ArrayList<Movie> movies);
@@ -22,7 +21,9 @@ public interface BoxOfficeContract extends BaseContract {
         void onRefresh();
         void onLoadMoreData();
         void movieCardClicked(int movieID);
+        void onSearchOpen();
         void onSearch(String query);
+        void onSearchEmpty();
         void onSearchClosed();
     }
 }

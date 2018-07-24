@@ -1,6 +1,8 @@
 package com.perrusset.romain.boxotop.UIL.Fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -12,24 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.perrusset.romain.boxotop.R;
+import com.perrusset.romain.boxotop.UIL.Adapter.LoadMoreEventListener;
 import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardAdapter;
+import com.perrusset.romain.boxotop.UIL.Adapter.OnLoadListener;
 import com.perrusset.romain.boxotop.UIL.Contracts.BaseContract;
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
-import com.perrusset.romain.boxotop.UIL.Movie;
 
 import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class BoxOfficeFragment extends android.support.v4.app.Fragment implements BoxOfficeContract.View, MenuItem.OnActionExpandListener {
+public class BoxOfficeFragment extends android.support.v4.app.Fragment
+        implements BoxOfficeContract.View, MenuItem.OnActionExpandListener, LoadMoreEventListener {
 
     private BoxOfficeContract.Presenter _presenter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private boolean IsSearchBarOpen;
-
-    private ArrayList<Movie> listMovies;
+    private String quickStringSearch = "";
+    private boolean isAlreadyWaiting = false;
 
     private MovieCardAdapter mAdapter;
 
@@ -59,24 +63,30 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment implement
         //Tell that the fragment handle the toolbar menu
         setHasOptionsMenu(true);
 
+        //Inflate the view
         View v = inflater.inflate(R.layout.fragment_box_office, container, false);
 
-        listMovies = new ArrayList<Movie>();
-
+        //Get the recyclerView and set up it
         mRecyclerView = v.findViewById((R.id.recyclerview_box_office));
+        mRecyclerView.setHasFixedSize(true);
 
         //set up the adapter
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new MovieCardAdapter(getContext());
+
+        //Plug the adapter to recyclerView
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        mAdapter = new MovieCardAdapter(getContext());
-        mRecyclerView.setAdapter(mAdapter);
+        // set up the scroll listener to know when to load more data
+        OnLoadListener listener = new OnLoadListener(mLayoutManager, this);
+
+        mRecyclerView.addOnScrollListener(listener);
+
+        mAdapter.setListFull(false);
 
         return v;
     }
@@ -87,63 +97,12 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment implement
         _presenter.start();
     }
 
-    @Override
-    public void notifyPresenterReady(ArrayList arrayList) {
-
-        mAdapter.setmDataset(arrayList);
-        mAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void notifyDataLoaded() {
-
-    }
-
-    @Override
-    public void notifyDataRefreshed() {
-
-    }
-
-    @Override
-    public void clearList() {
-        listMovies.clear();
-        mAdapter.setmDataset(listMovies);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setSearchEmpty() {
-
-    }
-
-    @Override
-    public void addList(ArrayList arrayList) {
-
-        listMovies.addAll(arrayList);
-        mAdapter.setmDataset (listMovies);
-        mAdapter.notifyItemInserted(listMovies.size() - 1);
-    }
-
-    @Override
-    public void startNextActivity(int movieID) {
-
-    }
-
-    @Override
-    public void setListFull() {
-
-    }
-
-    @Override
-    public void setListNotFull() {
-
-    }
 
     @Override
     public void setPresenter(BaseContract.Presenter presenter) {
         _presenter = (BoxOfficeContract.Presenter) presenter;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -186,7 +145,6 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment implement
             }
         });
 
-
         //Set the event on the searchbar when it is collapsed
         // or expanded
         item.setOnActionExpandListener(this);
@@ -194,38 +152,97 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment implement
         super.onPrepareOptionsMenu(menu);
     }
 
-    private void performSearch(String s) {
-        //do the search
+    @Override
+    public void notifyDataLoaded() {
+
     }
 
+    @Override
+    public void notifyDataRefreshed() {
+
+    }
+
+    @Override
+    public void clearList() {
+        mAdapter.clearList();
+    }
+
+    @Override
+    public void setSearchEmpty() {
+
+    }
+
+    @Override
+    public void addList(ArrayList arrayList) {
+        mAdapter.addAll(arrayList);
+    }
+
+    @Override
+    public void startNextActivity(int movieID) {
+
+    }
+
+    @Override
+    public void setListFull() {
+        mAdapter.setListFull(true);
+        mAdapter.removeLoadingFooter();
+    }
+
+    @Override
+    public void setListNotFull() {
+        mAdapter.setListFull(false);
+    }
+
+    private void performSearch(String s) {
+        isAlreadyWaiting = false;
+
+        if(!s.equals("")){
+            _presenter.onSearch(s);
+        }
+    }
+
+
+
     private void performQuickSearch(String s) {
-        //do the search
+
+        quickStringSearch=s;
+
+        if(!isAlreadyWaiting){
+            isAlreadyWaiting = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    performSearch(quickStringSearch);
+                }
+            }, 500);
+        }
     }
 
     private void onSearchBarFieldEmpty() {
-        //clear the view
+        isAlreadyWaiting = false;
+        _presenter.onSearchEmpty();
     }
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
-        onCloseSearchBar();
-        IsSearchBarOpen = false;
+        _presenter.onSearchClosed();
         return true;
     }
 
 
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
-        onOpenSearchBar();
-        IsSearchBarOpen = true;
+        _presenter.onSearchOpen();
         return true;
     }
 
-    protected void onOpenSearchBar() {
-        //clean the list to look empty
-    }
 
-    protected void onCloseSearchBar() {
-        // put back the data
+    @Override
+    public void onLoadMoreData() {
+
+        if (!mAdapter.getIsListFull()) {
+            _presenter.onLoadMoreData();
+        }
     }
 }

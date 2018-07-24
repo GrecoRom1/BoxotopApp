@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,17 +22,34 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     private ArrayList<Movie> mDataset;
     private Context mContext;
 
+    // Lazy loading
+    private boolean IsLoadingAdded = false;
+
+    private boolean IsListFull;
+
+    public void setListFull(boolean listFull) {
+        IsListFull = listFull;
+    }
+
+    public boolean getIsListFull() {
+        return IsListFull;
+    }
+
+    private final int ITEM = 0;
+    private final int LOADING = 1;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTitleTextView;
         public ImageView mPosterImageView;
         public RelativeLayout mBackground;
 
+
         public ViewHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.textview_listview_movieTitle);
             mPosterImageView = (ImageView) itemView.findViewById(R.id.imageview_listview_poster);
-            mBackground = (RelativeLayout)itemView.findViewById(R.id.background_listview);
+            mBackground = (RelativeLayout) itemView.findViewById(R.id.background_listview);
         }
     }
 
@@ -41,7 +59,7 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
         mDataset = new ArrayList<Movie>();
     }
 
-    public void setmDataset(ArrayList<Movie> firstList){
+    public void setmDataset(ArrayList<Movie> firstList) {
         mDataset = firstList;
     }
 
@@ -51,40 +69,58 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
 
         Context context = parent.getContext();
 
-        LayoutInflater inflater = LayoutInflater.from(context);
+        if (viewType == LOADING) {
 
-        // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.cells_listview_box_office, parent, false);
-
-        // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-
-        return viewHolder;
+            ProgressBar progressBar = new ProgressBar(context, null);
+            ViewHolder viewHolder = (ViewHolder) new LoadingViewHolder(progressBar);
+            return (new LoadingViewHolder(progressBar));
+        } else {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View contactView = inflater.inflate(R.layout.cells_listview_box_office, parent, false);
+            ViewHolder vh = new ViewHolder(contactView);
+            return vh;
+        }
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        Movie movie = mDataset.get(position);
 
-        //Set the title
-        TextView textView = holder.mTitleTextView;
-        textView.setText(movie.title);
+        //Chck if it is not the loading frame
+        if (getItemViewType(position) == ITEM) {
 
-        //Set the poster
-        String url = "http://image.tmdb.org/t/p/w185"+movie.posterPath;
-        ImageView imageView = holder.mPosterImageView;
-        Picasso.with(mContext).load(url).into(imageView);
+            Movie movie = mDataset.get(position);
 
-        //Set the background color
-        if((position%2)==0){
-            holder.mBackground.setBackgroundColor(Color.parseColor("#b6d7a8"));
+            //Set the title
+            TextView textView = holder.mTitleTextView;
+            textView.setText(movie.title);
+
+            //Set the poster
+            String url = "http://image.tmdb.org/t/p/w185" + movie.posterPath;
+            ImageView imageView = holder.mPosterImageView;
+            Picasso.with(mContext).load(url).into(imageView);
+
+            //Set the background color
+            if ((position % 2) == 0) {
+                holder.mBackground.setBackgroundColor(Color.parseColor("#b6d7a8"));
+            } else {
+                holder.mBackground.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
         }
         else{
-            holder.mBackground.setBackgroundColor(Color.parseColor("#ffffff"));
+            ViewGroup.LayoutParams parameters = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            ProgressBar progressBar = ((LoadingViewHolder)holder).progressBar;
+            progressBar.setIndeterminate(true);
+            progressBar.setLayoutParams(parameters);
+            progressBar.setPadding(8, 8, 8, 8);
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position == mDataset.size() - 1 && IsLoadingAdded) ? LOADING : ITEM;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -92,4 +128,75 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     public int getItemCount() {
         return mDataset.size();
     }
+
+    private void addItem(Movie item) {
+        mDataset.add(item);
+        notifyItemInserted(mDataset.size() - 1);
+    }
+
+    private void removeItem(Movie item) {
+        int position = mDataset.indexOf(item);
+        if (position > -1) {
+            mDataset.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void addLoadingFooter() {
+        IsLoadingAdded = true;
+        addItem(new Movie());
+    }
+
+    public void removeLoadingFooter() {
+        IsLoadingAdded = false;
+
+        int position = mDataset.size() - 1;
+
+        try {
+            Movie item = mDataset.get(position);
+            mDataset.remove(position);
+            notifyItemRemoved(position);
+        } catch (IndexOutOfBoundsException e) {
+
+        }
+    }
+
+    public void clearList(){
+        removeLoadingFooter();
+        int pos = mDataset.size();
+        mDataset.clear();
+        notifyItemRangeRemoved(0, pos);
+    }
+
+    public void resetList(ArrayList<Movie> movies) {
+
+        clearList();
+
+        mDataset.addAll(movies);
+        notifyItemRangeInserted(0, mDataset.size() - 1);
+        addLoadingFooter();
+    }
+
+    public void addAll(ArrayList<Movie> movies) {
+        removeLoadingFooter();
+        int pos = mDataset.size();
+
+        mDataset.addAll(movies);
+        notifyItemRangeInserted(pos, mDataset.size() - 1);
+        addLoadingFooter();
+    }
+
+    class LoadingViewHolder extends MovieCardAdapter.ViewHolder {
+
+        private ProgressBar progressBar;
+
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
+
+            if (itemView.getClass() == ProgressBar.class) {
+                progressBar = (ProgressBar) itemView;
+            }
+        }
+    }
 }
+

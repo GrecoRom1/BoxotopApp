@@ -16,7 +16,6 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     private ArrayList<Movie> boxOfficeList;
     private int positionInBoxOfficeList;
 
-
     private MoviesAPI _moviesAPI;
 
     private boolean isOnSearch;
@@ -38,12 +37,12 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     public void start() {
         if (!isInitialized) {
             isInitialized = true;
+            boxOfficeList = new ArrayList<Movie>();
             positionInBoxOfficeList = 0;
-            _moviesAPI = new MoviesAPI();
+            _moviesAPI = new MoviesAPI(mContext);
             onRefresh();
         }
     }
-
 
     @Override
     public void onRefresh() {
@@ -69,12 +68,12 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
 
     @Override
     public void onSearch(String query) {
-        pageSearch = 1;
-        searchValue = query;
-        isOnSearch = true;
-        _view.clearList();
+        if ((!query.equals(searchValue)) && (!query.equals(""))) {
+            pageSearch = 1;
+            searchValue = query;
+            isOnSearch = true;
+            _view.clearList();
 
-        if(!query.equals("")){
             _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
         }
     }
@@ -89,17 +88,6 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
     }
 
-    /**
-     * Method to generate List of notice using RecyclerView with custom adapter
-     */
-    private void generateNoticeList(ArrayList<Movie> noticeArrayList) {
-
-        ArrayList<Movie> a = new ArrayList<Movie>();
-        a = noticeArrayList;
-
-        _view.notifyPresenterReady(a);
-    }
-
     @Override
     public void onSearchClosed() {
         isOnSearch = false;
@@ -109,12 +97,22 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     }
 
     @Override
+    public void onSearchOpen() {
+        _view.clearList();
+    }
+
+    @Override
+    public void onSearchEmpty() {
+        _view.clearList();
+    }
+
+    @Override
     public void OnResultBoxOffice(ArrayList<Movie> result, int page) {
 
         if (result.size() == 0) {
             _view.setListFull();
         } else {
-            if(page<2){
+            if (page < 2) {
                 _view.notifyDataRefreshed();
             }
             _view.addList(result);
@@ -130,7 +128,6 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
         } else {
             _view.addList(result);
             _view.setListNotFull();
-            boxOfficeList.addAll(result);
         }
     }
 

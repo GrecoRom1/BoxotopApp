@@ -1,5 +1,6 @@
 package com.perrusset.romain.boxotop.UIL.SAL;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.perrusset.romain.boxotop.UIL.MovieList;
@@ -10,11 +11,17 @@ import retrofit2.Response;
 
 public class MoviesAPI {
 
-    public MoviesAPI(){
+    private Context mContext;
+
+    private boolean IsWaitEnough = false;
+
+    public MoviesAPI(Context context) {
+        mContext = context;
     }
+
     public void getPopularMovie(final int page, final CallbackMoviesAPI callback) {
         /** Create handle for the RetrofitInstance interface*/
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance(mContext).create(GetDataService.class);
 
         /** Call the method with parameter in the interface to get the notice data*/
         Call<MovieList> call = service.getPopularMovie(page);
@@ -37,13 +44,12 @@ public class MoviesAPI {
     }
 
 
-    public void getMovieFromSearch(String query, final int page,final CallbackMoviesAPI callback)
-    {
+    public void getMovieFromSearch(String query, final int page, final CallbackMoviesAPI callback) {
         /** Create handle for the RetrofitInstance interface*/
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance(mContext).create(GetDataService.class);
 
         /** Call the method with parameter in the interface to get the notice data*/
-        Call<MovieList> call = service.getMovieFromSearch(query,page);
+        Call<MovieList> call = service.getMovieFromSearch(query, page);
 
         /**Log the URL called*/
         Log.wtf("URL Called", call.request().url() + "");
@@ -51,7 +57,9 @@ public class MoviesAPI {
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                callback.OnResultSearch(response.body().getMovieArrayList(),page);
+                callback.OnResultSearch(response.body().getMovieArrayList(), page);
+
+
             }
 
             @Override
@@ -59,6 +67,7 @@ public class MoviesAPI {
                 //Toast.makeText(MainActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 }
