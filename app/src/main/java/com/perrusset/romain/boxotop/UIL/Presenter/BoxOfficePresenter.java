@@ -1,6 +1,8 @@
 package com.perrusset.romain.boxotop.UIL.Presenter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
 import com.perrusset.romain.boxotop.UIL.Movie;
@@ -15,6 +17,9 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     private BoxOfficeContract.View _view;
     private ArrayList<Movie> boxOfficeList;
     private int positionInBoxOfficeList;
+
+    private String quickStringSearch = "";
+    private boolean isAlreadyWaiting = false;
 
     private MoviesAPI _moviesAPI;
 
@@ -68,13 +73,39 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
 
     @Override
     public void onSearch(String query) {
-        if ((!query.equals(searchValue)) && (!query.equals(""))) {
-            pageSearch = 1;
-            searchValue = query;
-            isOnSearch = true;
-            _view.clearList();
+        if (query.equals("")) {
+            onSearchEmpty();
+        } else {
+            isAlreadyWaiting = false;
+            if ((!query.equals(searchValue))) {
+                pageSearch = 1;
+                searchValue = query;
+                isOnSearch = true;
+                _view.clearList();
 
-            _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
+                _moviesAPI.getMovieFromSearch(searchValue, pageSearch, this);
+            }
+        }
+    }
+
+    @Override
+    public void onQuickSearch(String query) {
+
+        if (query.equals("")) {
+            onSearchEmpty();
+        } else {
+            quickStringSearch = query;
+
+            if (!isAlreadyWaiting) {
+                isAlreadyWaiting = true;
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSearch(quickStringSearch);
+                    }
+                }, 500);
+            }
         }
     }
 
@@ -107,7 +138,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     }
 
     @Override
-    public void OnResultBoxOffice(ArrayList<Movie> result, int page) {
+    public void onResultBoxOffice(ArrayList<Movie> result, int page) {
 
         if (result.size() == 0) {
             _view.setListFull();
@@ -122,7 +153,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     }
 
     @Override
-    public void OnResultSearch(ArrayList<Movie> result, int page) {
+    public void onResultSearch(ArrayList<Movie> result, int page) {
         if (result.size() == 0) {
             _view.setListFull();
         } else {
@@ -134,5 +165,14 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     @Override
     public void OnError(ErrorMoviesAPIEnum error) {
 
+    }
+    @Override
+    public void onBackPressed(){
+        if(isOnSearch){
+            onSearchClosed();
+        }
+        else{
+            _view.terminateActivity();
+        }
     }
 }

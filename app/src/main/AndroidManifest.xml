@@ -19,15 +19,22 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
+
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".UIL.Activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UIL.Activities.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

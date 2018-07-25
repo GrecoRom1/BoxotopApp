@@ -21,6 +21,7 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
 
     private ArrayList<Movie> mDataset;
     private Context mContext;
+    private static MovieCardClickListener mClickListener;
 
     // Lazy loading
     private boolean IsLoadingAdded = false;
@@ -38,7 +39,7 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     private final int ITEM = 0;
     private final int LOADING = 1;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView mTitleTextView;
         public ImageView mPosterImageView;
@@ -50,13 +51,20 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
             mTitleTextView = (TextView) itemView.findViewById(R.id.textview_listview_movieTitle);
             mPosterImageView = (ImageView) itemView.findViewById(R.id.imageview_listview_poster);
             mBackground = (RelativeLayout) itemView.findViewById(R.id.background_listview);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mClickListener.movieCardClicked(view,this.getLayoutPosition());
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MovieCardAdapter(Context context) {
+    public MovieCardAdapter(Context context, MovieCardClickListener clickListener) {
         mContext = context;
         mDataset = new ArrayList<Movie>();
+        mClickListener = clickListener;
     }
 
     public void setmDataset(ArrayList<Movie> firstList) {
@@ -162,28 +170,22 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     }
 
     public void clearList(){
-        removeLoadingFooter();
-        int pos = mDataset.size();
-        mDataset.clear();
-        notifyItemRangeRemoved(0, pos);
+        if(mDataset.size()>0){
+            removeLoadingFooter();
+            mDataset.clear();
+            notifyDataSetChanged();
+        }
     }
 
-    public void resetList(ArrayList<Movie> movies) {
-
-        clearList();
-
-        mDataset.addAll(movies);
-        notifyItemRangeInserted(0, mDataset.size() - 1);
-        addLoadingFooter();
-    }
 
     public void addAll(ArrayList<Movie> movies) {
         removeLoadingFooter();
         int pos = mDataset.size();
 
         mDataset.addAll(movies);
-        notifyItemRangeInserted(pos, mDataset.size() - 1);
+        //notifyItemRangeInserted(pos, mDataset.size());
         addLoadingFooter();
+        notifyDataSetChanged();
     }
 
     class LoadingViewHolder extends MovieCardAdapter.ViewHolder {

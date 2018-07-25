@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.perrusset.romain.boxotop.R;
+import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
 import com.perrusset.romain.boxotop.UIL.Fragments.BoxOfficeFragment;
 import com.perrusset.romain.boxotop.UIL.Presenter.BoxOfficePresenter;
 
@@ -16,6 +17,8 @@ public class BoxOfficeActivity extends AppCompatActivity {
 
     private BoxOfficeFragment rootFragment;
     private BoxOfficeFragment searchFragment;
+
+    private BoxOfficeContract.Presenter _presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,8 @@ public class BoxOfficeActivity extends AppCompatActivity {
         if (fragment == null)
         {
             fragment = BoxOfficeFragment.newInstance();
-            fragment.setPresenter(new BoxOfficePresenter(this,fragment));
+            _presenter = new BoxOfficePresenter(this,fragment);
+            fragment.setPresenter(_presenter);
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.fragment, fragment);
@@ -45,4 +49,10 @@ public class BoxOfficeActivity extends AppCompatActivity {
             fragmentTransaction.commit();
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        _presenter.onBackPressed();
+    }
+
 }

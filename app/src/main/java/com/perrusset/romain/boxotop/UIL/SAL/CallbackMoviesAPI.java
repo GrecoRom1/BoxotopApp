@@ -1,13 +1,15 @@
 package com.perrusset.romain.boxotop.UIL.SAL;
 
+import com.perrusset.romain.boxotop.UIL.Cast;
 import com.perrusset.romain.boxotop.UIL.Movie;
 
 import java.util.ArrayList;
 
 public interface CallbackMoviesAPI {
-    void OnResultBoxOffice(ArrayList<Movie> result,int page);
-    void OnResultSearch(ArrayList<Movie> result, int page);
+    void onResultBoxOffice(ArrayList<Movie> result, int page);
+    void onResultSearch(ArrayList<Movie> result, int page);
     void OnError(ErrorMoviesAPIEnum error);
-    //void OnResultMovieDetail(Movie result);
+    void onResultDetailsMovie(Movie movie);
+    void onResultCastListOfMovie(ArrayList<Cast> castList);
 
 }

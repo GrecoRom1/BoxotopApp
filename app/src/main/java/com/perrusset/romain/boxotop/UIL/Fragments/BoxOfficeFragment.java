@@ -1,7 +1,6 @@
 package com.perrusset.romain.boxotop.UIL.Fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import com.perrusset.romain.boxotop.R;
 import com.perrusset.romain.boxotop.UIL.Adapter.LoadMoreEventListener;
 import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardAdapter;
+import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardClickListener;
 import com.perrusset.romain.boxotop.UIL.Adapter.OnLoadListener;
 import com.perrusset.romain.boxotop.UIL.Contracts.BaseContract;
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
@@ -26,14 +26,13 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class BoxOfficeFragment extends android.support.v4.app.Fragment
-        implements BoxOfficeContract.View, MenuItem.OnActionExpandListener, LoadMoreEventListener {
+        implements BoxOfficeContract.View, MenuItem.OnActionExpandListener, LoadMoreEventListener, MovieCardClickListener {
 
     private BoxOfficeContract.Presenter _presenter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private boolean IsSearchBarOpen;
-    private String quickStringSearch = "";
-    private boolean isAlreadyWaiting = false;
+
 
     private MovieCardAdapter mAdapter;
 
@@ -71,7 +70,7 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
         mRecyclerView.setHasFixedSize(true);
 
         //set up the adapter
-        mAdapter = new MovieCardAdapter(getContext());
+        mAdapter = new MovieCardAdapter(getContext(), this);
 
         //Plug the adapter to recyclerView
         mRecyclerView.setAdapter(mAdapter);
@@ -87,6 +86,8 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
         mRecyclerView.addOnScrollListener(listener);
 
         mAdapter.setListFull(false);
+
+        mAdapter.addLoadingFooter();
 
         return v;
     }
@@ -178,11 +179,6 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
     }
 
     @Override
-    public void startNextActivity(int movieID) {
-
-    }
-
-    @Override
     public void setListFull() {
         mAdapter.setListFull(true);
         mAdapter.removeLoadingFooter();
@@ -194,33 +190,17 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
     }
 
     private void performSearch(String s) {
-        isAlreadyWaiting = false;
 
-        if(!s.equals("")){
+        if (!s.equals("")) {
             _presenter.onSearch(s);
         }
     }
 
-
-
     private void performQuickSearch(String s) {
-
-        quickStringSearch=s;
-
-        if(!isAlreadyWaiting){
-            isAlreadyWaiting = true;
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    performSearch(quickStringSearch);
-                }
-            }, 500);
-        }
+        _presenter.onQuickSearch(s);
     }
 
     private void onSearchBarFieldEmpty() {
-        isAlreadyWaiting = false;
         _presenter.onSearchEmpty();
     }
 
@@ -244,5 +224,20 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
         if (!mAdapter.getIsListFull()) {
             _presenter.onLoadMoreData();
         }
+    }
+
+    @Override
+    public void startNextActivity(int movieID) {
+
+    }
+
+    @Override
+    public void terminateActivity() {
+        getActivity().finish();
+    }
+
+    @Override
+    public void movieCardClicked(View v, int position) {
+        _presenter.movieCardClicked(position);
     }
 }

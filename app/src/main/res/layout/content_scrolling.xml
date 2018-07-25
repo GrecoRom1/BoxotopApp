@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".UIL.Activities.ScrollingActivity"
+    tools:showIn="@layout/activity_scrolling">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- HEADER : SUBJECT + Audience + endate-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/relativeLayout_header">
+            <TextView
+                android:text="Genre"
+                style="@style/TextView_MovieDetails.Genre"
+                android:id="@+id/textView_topic" />
+            <TextView
+                android:text="Relase date : 17 March 2017"
+                style="@style/TextView_MovieDetails.ReleaseDate"
+                android:layout_alignParentRight="true"
+                android:id="@+id/textView_endDate" />
+            <TextView
+                android:text="Casting: CODIR, CODEX, IT, HR"
+                style="@style/TextView_MovieDetails.Casting"
+                android:layout_below="@id/textView_topic"
+                android:id="@+id/textView_audiences" />
+        </RelativeLayout>
+        <View   style="@style/Divider" />
+        <RatingBar
+            android:rating="3.5"
+            android:stepSize="0.5"
+            android:numStars="5"
+            android:isIndicator="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!--Author-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:text="Casting :"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/textView_casting" />
+            <TextView
+                android:text="John Doe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/textView_authorName" />
+        </LinearLayout>
+
+        <TextView
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:id="@+id/textview_content" />
+
+        <Button
+            android:text="Check on IMDB (link)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/button_link" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

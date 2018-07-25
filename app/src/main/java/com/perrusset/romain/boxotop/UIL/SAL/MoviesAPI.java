@@ -3,6 +3,8 @@ package com.perrusset.romain.boxotop.UIL.SAL;
 import android.content.Context;
 import android.util.Log;
 
+import com.perrusset.romain.boxotop.UIL.CastingList;
+import com.perrusset.romain.boxotop.UIL.Movie;
 import com.perrusset.romain.boxotop.UIL.MovieList;
 
 import retrofit2.Call;
@@ -32,7 +34,7 @@ public class MoviesAPI {
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                callback.OnResultBoxOffice(response.body().getMovieArrayList(), page);
+                callback.onResultBoxOffice(response.body().getMovieArrayList(), page);
             }
 
             @Override
@@ -57,7 +59,7 @@ public class MoviesAPI {
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                callback.OnResultSearch(response.body().getMovieArrayList(), page);
+                callback.onResultSearch(response.body().getMovieArrayList(), page);
 
 
             }
@@ -68,6 +70,54 @@ public class MoviesAPI {
             }
         });
 
+    }
+
+    public void getDetailsMovie(int movieId, final CallbackMoviesAPI callback) {
+        /** Create handle for the RetrofitInstance interface*/
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance(mContext).create(GetDataService.class);
+
+        /** Call the method with parameter in the interface to get the notice data*/
+        Call<Movie> call = service.getDetailMovie(movieId);
+
+        /**Log the URL called*/
+        Log.wtf("URL Called", call.request().url() + "");
+
+        call.enqueue(new Callback<Movie>() {
+            @Override
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                callback.onResultDetailsMovie(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Movie> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //todo callback.OnError(ErrorMoviesAPIEnum.SearchEmpty);
+            }
+        });
+    }
+
+    public void getCastListOfMovie(int movieId, final CallbackMoviesAPI callback) {
+        /** Create handle for the RetrofitInstance interface*/
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance(mContext).create(GetDataService.class);
+
+        /** Call the method with parameter in the interface to get the notice data*/
+        Call<CastingList> call = service.getCastingList(movieId);
+
+        /**Log the URL called*/
+        Log.wtf("URL Called", call.request().url() + "");
+
+        call.enqueue(new Callback<CastingList>() {
+            @Override
+            public void onResponse(Call<CastingList> call, Response<CastingList> response) {
+                callback.onResultCastListOfMovie(response.body().getCastingArrayList());
+            }
+
+            @Override
+            public void onFailure(Call<CastingList> call, Throwable t) {
+                //Toast.makeText(MainActivity.this, "Something went wrong...Error message: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //todo callback.OnError(ErrorMoviesAPIEnum.SearchEmpty);
+            }
+        });
     }
 
 }

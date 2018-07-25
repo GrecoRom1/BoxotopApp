@@ -15,6 +15,7 @@ public interface BoxOfficeContract extends BaseContract {
         void startNextActivity(int movieID);
         void setListFull();
         void setListNotFull();
+        void terminateActivity();
     }
 
     interface Presenter extends BaseContract.Presenter {
@@ -23,7 +24,9 @@ public interface BoxOfficeContract extends BaseContract {
         void movieCardClicked(int movieID);
         void onSearchOpen();
         void onSearch(String query);
+        void onQuickSearch(String query);
         void onSearchEmpty();
         void onSearchClosed();
+        void onBackPressed();
     }
 }
