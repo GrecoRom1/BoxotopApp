@@ -4,28 +4,24 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.perrusset.romain.boxotop.R;
-import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
-import com.perrusset.romain.boxotop.UIL.Fragments.BoxOfficeFragment;
-import com.perrusset.romain.boxotop.UIL.Presenter.BoxOfficePresenter;
+import com.perrusset.romain.boxotop.UIL.Contracts.MovieDetailsContract;
+import com.perrusset.romain.boxotop.UIL.Fragments.MovieDetailsFragment;
+import com.perrusset.romain.boxotop.UIL.Presenter.MovieDetailsPresenter;
 
-public class BoxOfficeActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity {
 
-
-    private BoxOfficeFragment rootFragment;
-    private BoxOfficeFragment searchFragment;
-
-    private BoxOfficeContract.Presenter _presenter;
+    private static final String MOVIE_ID = "movieID";
+    private int mMovieID;
+    private MovieDetailsContract.Presenter _presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_box_office);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_movie_details);
 
+        mMovieID = getIntent().getIntExtra(MOVIE_ID,-1);
         onCreateUserInterface();
     }
 
@@ -33,13 +29,12 @@ public class BoxOfficeActivity extends AppCompatActivity {
     private void onCreateUserInterface() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        BoxOfficeFragment fragment = (BoxOfficeFragment)fragmentManager
+        MovieDetailsFragment fragment = (MovieDetailsFragment) fragmentManager
                 .findFragmentById(R.id.fragment);
 
-        if (fragment == null)
-        {
-            fragment = BoxOfficeFragment.newInstance();
-            _presenter = new BoxOfficePresenter(this,fragment);
+        if (fragment == null) {
+            fragment = MovieDetailsFragment.newInstance(mMovieID);
+            _presenter = new MovieDetailsPresenter(this, fragment);
             fragment.setPresenter(_presenter);
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -50,8 +45,7 @@ public class BoxOfficeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        _presenter.onBackPressed();
+    public void onBackPressed() {
+        finish();
     }
-
 }

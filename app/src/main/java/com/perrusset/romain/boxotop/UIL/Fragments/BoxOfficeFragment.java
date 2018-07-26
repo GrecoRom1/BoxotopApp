@@ -1,5 +1,6 @@
 package com.perrusset.romain.boxotop.UIL.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.perrusset.romain.boxotop.R;
+import com.perrusset.romain.boxotop.UIL.Activities.MovieDetailsActivity;
 import com.perrusset.romain.boxotop.UIL.Adapter.LoadMoreEventListener;
 import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardAdapter;
 import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardClickListener;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
  */
 public class BoxOfficeFragment extends android.support.v4.app.Fragment
         implements BoxOfficeContract.View, MenuItem.OnActionExpandListener, LoadMoreEventListener, MovieCardClickListener {
+
+    private static final String MOVIE_ID = "movieID";
 
     private BoxOfficeContract.Presenter _presenter;
     private RecyclerView mRecyclerView;
@@ -117,7 +121,6 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
         // Get the item of the searchbar in the toolbar
         MenuItem item = menu.findItem(R.id.action_search);
 
-
         item.setVisible(true);
 
         // Get the searchbar View
@@ -191,13 +194,19 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
 
     private void performSearch(String s) {
 
-        if (!s.equals("")) {
+        s.trim();
+        if (!s.isEmpty()) {
+            mAdapter.addLoadingFooter();
             _presenter.onSearch(s);
         }
     }
 
     private void performQuickSearch(String s) {
-        _presenter.onQuickSearch(s);
+        s.trim();
+        if (!s.isEmpty()) {
+            mAdapter.addLoadingFooter();
+            _presenter.onQuickSearch(s);
+        }
     }
 
     private void onSearchBarFieldEmpty() {
@@ -228,7 +237,9 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
 
     @Override
     public void startNextActivity(int movieID) {
-
+        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+        intent.putExtra(MOVIE_ID, movieID);
+        startActivity(intent);
     }
 
     @Override

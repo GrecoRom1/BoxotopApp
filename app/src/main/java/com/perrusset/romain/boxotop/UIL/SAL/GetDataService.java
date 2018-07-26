@@ -20,9 +20,9 @@ public interface GetDataService {
     Call<MovieList> getMovieFromSearch(@Query("query") String search, @Query("page")
             int pageNumber);
 
-    @GET("/3/search/movie/{movie_id}"+apiKey)
+    @GET("/3/movie/{movie_id}"+apiKey)
     Call<Movie> getDetailMovie(@Path("movie_id") int idMovie);
 
-    @GET("/3/search/movie/{movie_id}"+apiKey)
+    @GET("/3/movie/{movie_id}/credits"+apiKey)
     Call<CastingList> getCastingList(@Path("movie_id") int idMovie);
 }

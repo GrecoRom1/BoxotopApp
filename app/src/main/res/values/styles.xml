@@ -34,25 +34,25 @@
     </style>
 
     <style name="TextView_MovieDetails.Title" parent="TextView_MovieDetails">
-        <item name="android:textSize">@dimen/fontsize_notificationsDetails_subject</item>
+        <item name="android:textSize">@dimen/fontsize_movieDetails_important</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:maxLines">2</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextView_MovieDetails.ReleaseDate" parent="TextView_MovieDetails">
-        <item name="android:textSize">@dimen/fontsize_notificationsDetails_enddate</item>
+    <style name="TextView_MovieDetails.Duration" parent="TextView_MovieDetails">
+        <item name="android:textSize">@dimen/fontsize_movieDetails_normal</item>
+        <item name="android:textStyle">italic</item>
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="TextView_MovieDetails.Genre" parent="TextView_MovieDetails">
-        <item name="android:textSize">@dimen/fontsize_notificationsDetails_enddate</item>
-        <item name="android:textColor">@color/colorAccent</item>
+    <style name="TextView_MovieDetails.Director" parent="TextView_MovieDetails">
+        <item name="android:textSize">@dimen/fontsize_movieDetails_normal</item>
         <item name="android:maxLines">1</item>
     </style>
 
     <style name="TextView_MovieDetails.Casting" parent="TextView_MovieDetails">
-        <item name="android:textSize">@dimen/fontsize_notificationsDetails_enddate</item>
+        <item name="android:textSize">@dimen/fontsize_movieDetails_normal</item>
         <item name="android:maxLines">2</item>
     </style>
 </resources>

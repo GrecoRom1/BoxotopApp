@@ -21,7 +21,7 @@ public interface BoxOfficeContract extends BaseContract {
     interface Presenter extends BaseContract.Presenter {
         void onRefresh();
         void onLoadMoreData();
-        void movieCardClicked(int movieID);
+        void movieCardClicked(int position);
         void onSearchOpen();
         void onSearch(String query);
         void onQuickSearch(String query);

@@ -104,9 +104,9 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
             textView.setText(movie.title);
 
             //Set the poster
-            String url = "http://image.tmdb.org/t/p/w185" + movie.posterPath;
+
             ImageView imageView = holder.mPosterImageView;
-            Picasso.with(mContext).load(url).into(imageView);
+            Picasso.with(mContext).load(movie.getURLFormattedString()).into(imageView);
 
             //Set the background color
             if ((position % 2) == 0) {
@@ -140,6 +140,7 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     private void addItem(Movie item) {
         mDataset.add(item);
         notifyItemInserted(mDataset.size() - 1);
+        notifyDataSetChanged();
     }
 
     private void removeItem(Movie item) {
@@ -161,7 +162,6 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
         int position = mDataset.size() - 1;
 
         try {
-            Movie item = mDataset.get(position);
             mDataset.remove(position);
             notifyItemRemoved(position);
         } catch (IndexOutOfBoundsException e) {
@@ -180,12 +180,12 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
 
     public void addAll(ArrayList<Movie> movies) {
         removeLoadingFooter();
-        int pos = mDataset.size();
+        int startPos = mDataset.size();
 
         mDataset.addAll(movies);
-        //notifyItemRangeInserted(pos, mDataset.size());
         addLoadingFooter();
-        notifyDataSetChanged();
+        notifyItemRangeInserted(startPos,movies.size());
+
     }
 
     class LoadingViewHolder extends MovieCardAdapter.ViewHolder {

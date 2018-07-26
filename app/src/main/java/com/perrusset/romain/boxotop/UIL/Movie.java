@@ -19,15 +19,36 @@ public class Movie {
     @SerializedName("overview")
     public String synopsis;
 
-    @SerializedName("vote_average")
-    public String vote;
-
     @SerializedName("poster_path")
     public String posterPath;
 
-    public Movie(){
+    @SerializedName("runtime")
+    public int durationInMinute;
+
+
+    @SerializedName("vote_average")
+    public float voteAverage;
+
+    public Movie() {
 
     }
 
+    public String getDurationFormattedString() {
+        int hours = durationInMinute / 60;
+        int minutes = durationInMinute % 60;
+        String durationString = Integer.toString(hours) + " h" + Integer.toString(minutes);
+
+        return durationString;
+    }
+
+    public String getURLFormattedString(){
+        String urlFormatted = "http://image.tmdb.org/t/p/w185"+posterPath;
+
+        return urlFormatted;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage/2.0f;
+    }
 }
 

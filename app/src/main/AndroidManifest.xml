@@ -31,10 +31,7 @@
             android:name=".UIL.Activities.BaseActivity"
             android:label="@string/title_activity_base"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".UIL.Activities.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".UIL.Activities.MovieDetailsActivity"></activity>
     </application>
 
 </manifest>

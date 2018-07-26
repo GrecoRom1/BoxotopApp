@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".UIL.Activities.ScrollingActivity"
-    tools:showIn="@layout/activity_scrolling">
+    tools:showIn="@layout/fragment_movie_details">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,62 +19,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/relativeLayout_header">
+
             <TextView
-                android:text="Genre"
-                style="@style/TextView_MovieDetails.Genre"
-                android:id="@+id/textView_topic" />
+                android:text="Director"
+                style="@style/TextView_MovieDetails.Director"
+                android:id="@+id/textView_director" />
             <TextView
-                android:text="Relase date : 17 March 2017"
-                style="@style/TextView_MovieDetails.ReleaseDate"
+                android:text="1 h 27"
+                style="@style/TextView_MovieDetails.Duration"
                 android:layout_alignParentRight="true"
-                android:id="@+id/textView_endDate" />
+                android:id="@+id/textView_duration" />
             <TextView
-                android:text="Casting: CODIR, CODEX, IT, HR"
+                android:text="Casting: "
                 style="@style/TextView_MovieDetails.Casting"
-                android:layout_below="@id/textView_topic"
-                android:id="@+id/textView_audiences" />
+                android:layout_below="@id/textView_director"
+                android:id="@+id/textView_casting" />
+            <TextView
+                android:text="Releasedate: "
+                style="@style/TextView_MovieDetails.Casting"
+                android:layout_below="@id/textView_casting"
+                android:id="@+id/textView_releaseDate" />
         </RelativeLayout>
         <View   style="@style/Divider" />
         <RatingBar
             android:rating="3.5"
-            android:stepSize="0.5"
+            android:stepSize="0.1"
             android:numStars="5"
             android:isIndicator="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <!--Author-->
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:text="Casting :"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:id="@+id/textView_casting" />
-            <TextView
-                android:text="John Doe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:id="@+id/textView_authorName" />
-        </LinearLayout>
-
+            android:id="@+id/rating_people"/>
+        <View   style="@style/Divider" />
         <TextView
             android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:id="@+id/textview_content" />
-
-        <Button
-            android:text="Check on IMDB (link)"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:id="@+id/button_link" />
-
+            android:id="@+id/textview_description" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

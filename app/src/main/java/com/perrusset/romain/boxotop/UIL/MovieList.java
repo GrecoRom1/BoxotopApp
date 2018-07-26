@@ -10,7 +10,12 @@ public class MovieList {
     private ArrayList<Movie> movieList;
 
     public ArrayList<Movie> getMovieArrayList() {
-        return movieList;
+
+        if (movieList != null) {
+            return movieList;
+        } else {
+            return new ArrayList<Movie>();
+        }
     }
 
     public void setMovieArrayList(ArrayList<Movie> noticeArrayList) {
