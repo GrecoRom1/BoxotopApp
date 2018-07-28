@@ -3,6 +3,11 @@
     <color name="colorPrimary">#7CB342</color>
     <color name="colorPrimaryDark">#558B2F</color>
     <color name="colorAccent">#C5E1A5</color>
+
+    <color name="splash.background">#ffffff</color>
+
+    <color name="boxOffice.cells.green">#b6d7a8</color>
+    <color name="boxOffice.cells.white">#ffffff</color>
     <color name="divider">#BDBDBD</color>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.perrusset.romain.boxotop.UIL;
+package com.perrusset.romain.boxotop.UIL.Model;
 
 import com.google.gson.annotations.SerializedName;
 

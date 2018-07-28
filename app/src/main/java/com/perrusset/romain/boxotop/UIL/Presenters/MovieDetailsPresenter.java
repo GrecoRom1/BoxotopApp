@@ -1,15 +1,14 @@
-package com.perrusset.romain.boxotop.UIL.Presenter;
+package com.perrusset.romain.boxotop.UIL.Presenters;
 
 import android.content.Context;
 
-import com.perrusset.romain.boxotop.UIL.Cast;
+import com.perrusset.romain.boxotop.UIL.Model.CastingList;
 import com.perrusset.romain.boxotop.UIL.Contracts.MovieDetailsContract;
-import com.perrusset.romain.boxotop.UIL.Movie;
-import com.perrusset.romain.boxotop.UIL.SAL.CallbackMoviesAPI;
-import com.perrusset.romain.boxotop.UIL.SAL.ErrorMoviesAPIEnum;
-import com.perrusset.romain.boxotop.UIL.SAL.MoviesAPI;
+import com.perrusset.romain.boxotop.UIL.Model.Movie;
 
-import java.util.ArrayList;
+import SAL.Callback.CallbackMoviesAPI;
+import SAL.ErrorMoviesAPIEnum;
+import SAL.MoviesAPI;
 
 public class MovieDetailsPresenter extends BasePresenter implements MovieDetailsContract.Presenter, CallbackMoviesAPI.MovieDetails {
 
@@ -17,6 +16,7 @@ public class MovieDetailsPresenter extends BasePresenter implements MovieDetails
     private boolean isInitialized;
 
     private MoviesAPI _moviesAPI;
+    private int mMovieID;
 
 
     public MovieDetailsPresenter(Context c, MovieDetailsContract.View view) {
@@ -26,16 +26,20 @@ public class MovieDetailsPresenter extends BasePresenter implements MovieDetails
     }
 
     @Override
-    public void start() {
-        if (!isInitialized) {
-            isInitialized = true;
-            _moviesAPI = new MoviesAPI(mContext);
-            _view.notifyPresenterReady();
-        }
+    public void start(){
     }
 
     @Override
-    public void getMovieDetails(int movieId) {
+    public void start(int movieId) {
+        if (!isInitialized) {
+            isInitialized = true;
+            _moviesAPI = new MoviesAPI(mContext);
+            mMovieID = movieId;
+            getMovieDetails(movieId);
+        }
+    }
+
+    private void getMovieDetails(int movieId) {
         _moviesAPI.getDetailsMovie(movieId, this);
     }
 
@@ -47,12 +51,12 @@ public class MovieDetailsPresenter extends BasePresenter implements MovieDetails
 
     @Override
     public void onResultDetailsMovie(Movie movie) {
-        _view.notifiyDataMovieLoaded(movie);
+        _view.notifyDataMovieLoaded(movie);
     }
 
     @Override
-    public void onResultCastListOfMovie(ArrayList<Cast> castList) {
-        _view.notifiyDataCastLoaded(castList);
+    public void onResultCastListOfMovie(CastingList castList) {
+        _view.notifyDataCastLoaded(castList);
     }
 
     @Override

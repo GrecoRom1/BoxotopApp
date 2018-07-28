@@ -1,16 +1,5 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="fontsize_cells_topic">12dp</dimen>
-    <dimen name="fontsize_cells_title">15dp</dimen>
-    <dimen name="fontsize_cells_date">12dp</dimen>
-    <dimen name="fontsize_cells_description">12dp</dimen>
 
-    <dimen name="separation_margin">5dp</dimen>
-
-    <dimen name="image_movieDetails_height">100dp</dimen>
-    <dimen name="fontsize_movieDetails_important">25dp</dimen>
     <dimen name="fontsize_movieDetails_normal">13dp</dimen>
 
 </resources>

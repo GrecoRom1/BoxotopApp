@@ -2,55 +2,47 @@ package com.perrusset.romain.boxotop.UIL.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.perrusset.romain.boxotop.R;
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
 import com.perrusset.romain.boxotop.UIL.Fragments.BoxOfficeFragment;
-import com.perrusset.romain.boxotop.UIL.Presenter.BoxOfficePresenter;
+import com.perrusset.romain.boxotop.UIL.Presenters.BoxOfficePresenter;
 
-public class BoxOfficeActivity extends AppCompatActivity {
+public class BoxOfficeActivity extends BaseActivity {
 
-
-    private BoxOfficeFragment rootFragment;
-    private BoxOfficeFragment searchFragment;
-
+    //region Properties
     private BoxOfficeContract.Presenter _presenter;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box_office);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         onCreateUserInterface();
     }
 
-
-    private void onCreateUserInterface() {
+    @Override
+    protected void onCreateUserInterface() {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        BoxOfficeFragment fragment = (BoxOfficeFragment)fragmentManager
+        BoxOfficeFragment fragment = (BoxOfficeFragment) fragmentManager
                 .findFragmentById(R.id.fragment);
 
-        if (fragment == null)
-        {
+        if (fragment == null) {
             fragment = BoxOfficeFragment.newInstance();
-            _presenter = new BoxOfficePresenter(this,fragment);
+            _presenter = new BoxOfficePresenter(this, fragment);
             fragment.setPresenter(_presenter);
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            startFragment(R.id.fragment,fragment);
         }
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         _presenter.onBackPressed();
     }
 

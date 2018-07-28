@@ -1,4 +1,4 @@
-package com.perrusset.romain.boxotop.UIL;
+package com.perrusset.romain.boxotop.UIL.Model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,7 +14,7 @@ public class MovieList {
         if (movieList != null) {
             return movieList;
         } else {
-            return new ArrayList<Movie>();
+            return new ArrayList<>();
         }
     }
 

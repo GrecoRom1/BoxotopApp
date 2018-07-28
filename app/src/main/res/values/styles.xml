@@ -17,6 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -31,13 +36,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name ="android:padding">5dp</item>
         <item name="android:ellipsize">end</item>
-    </style>
-
-    <style name="TextView_MovieDetails.Title" parent="TextView_MovieDetails">
-        <item name="android:textSize">@dimen/fontsize_movieDetails_important</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:maxLines">2</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextView_MovieDetails.Duration" parent="TextView_MovieDetails">

@@ -2,45 +2,48 @@ package com.perrusset.romain.boxotop.UIL.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import com.perrusset.romain.boxotop.R;
 import com.perrusset.romain.boxotop.UIL.Contracts.MovieDetailsContract;
 import com.perrusset.romain.boxotop.UIL.Fragments.MovieDetailsFragment;
-import com.perrusset.romain.boxotop.UIL.Presenter.MovieDetailsPresenter;
+import com.perrusset.romain.boxotop.UIL.Presenters.MovieDetailsPresenter;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends BaseActivity {
 
+    //region Static Properties
     private static final String MOVIE_ID = "movieID";
+
+    //endregion
+
+    //region Properties
     private int mMovieID;
-    private MovieDetailsContract.Presenter _presenter;
+    private MovieDetailsContract.Presenter mPresenter;
+
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
 
-        mMovieID = getIntent().getIntExtra(MOVIE_ID,-1);
+        setContentView(R.layout.activity_movie_details);
+        mMovieID = getIntent().getIntExtra(MOVIE_ID, -1);
+
         onCreateUserInterface();
     }
 
+    @Override
+    protected void onCreateUserInterface() {
 
-    private void onCreateUserInterface() {
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MovieDetailsFragment fragment = (MovieDetailsFragment) fragmentManager
+        FragmentManager lFragmentManager = getSupportFragmentManager();
+        MovieDetailsFragment lFragment = (MovieDetailsFragment) lFragmentManager
                 .findFragmentById(R.id.fragment);
 
-        if (fragment == null) {
-            fragment = MovieDetailsFragment.newInstance(mMovieID);
-            _presenter = new MovieDetailsPresenter(this, fragment);
-            fragment.setPresenter(_presenter);
+        if (lFragment == null) {
+            lFragment = MovieDetailsFragment.newInstance(mMovieID);
+            mPresenter = new MovieDetailsPresenter(this, lFragment);
+            lFragment.setPresenter(mPresenter);
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            startFragment(R.id.fragment, lFragment);
         }
     }
 

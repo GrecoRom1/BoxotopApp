@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UIL.Activities.ScrollingActivity"
+    tools:context=".UIL.Activities.MovieDetailsActivity"
     tools:showIn="@layout/fragment_movie_details">
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,32 +17,27 @@
         <!-- HEADER : SUBJECT + Audience + endate-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/relativeLayout_header">
+            android:layout_height="match_parent">
 
             <TextView
-                android:text="Director"
                 style="@style/TextView_MovieDetails.Director"
                 android:id="@+id/textView_director" />
             <TextView
-                android:text="1 h 27"
                 style="@style/TextView_MovieDetails.Duration"
                 android:layout_alignParentRight="true"
                 android:id="@+id/textView_duration" />
             <TextView
-                android:text="Casting: "
                 style="@style/TextView_MovieDetails.Casting"
                 android:layout_below="@id/textView_director"
                 android:id="@+id/textView_casting" />
             <TextView
-                android:text="Releasedate: "
                 style="@style/TextView_MovieDetails.Casting"
                 android:layout_below="@id/textView_casting"
                 android:id="@+id/textView_releaseDate" />
         </RelativeLayout>
         <View   style="@style/Divider" />
         <RatingBar
-            android:rating="3.5"
+            android:rating="0"
             android:stepSize="0.1"
             android:numStars="5"
             android:isIndicator="true"

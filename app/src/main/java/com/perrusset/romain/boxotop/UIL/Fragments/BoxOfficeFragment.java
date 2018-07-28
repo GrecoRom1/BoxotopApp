@@ -2,6 +2,7 @@ package com.perrusset.romain.boxotop.UIL.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,30 +16,30 @@ import android.view.ViewGroup;
 
 import com.perrusset.romain.boxotop.R;
 import com.perrusset.romain.boxotop.UIL.Activities.MovieDetailsActivity;
-import com.perrusset.romain.boxotop.UIL.Adapter.LoadMoreEventListener;
 import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardAdapter;
-import com.perrusset.romain.boxotop.UIL.Adapter.MovieCardClickListener;
-import com.perrusset.romain.boxotop.UIL.Adapter.OnLoadListener;
 import com.perrusset.romain.boxotop.UIL.Contracts.BaseContract;
 import com.perrusset.romain.boxotop.UIL.Contracts.BoxOfficeContract;
+import com.perrusset.romain.boxotop.UIL.Listeners.LoadMoreEventListener;
+import com.perrusset.romain.boxotop.UIL.Listeners.MovieCardClickListener;
+import com.perrusset.romain.boxotop.UIL.Listeners.OnLoadListener;
 
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-public class BoxOfficeFragment extends android.support.v4.app.Fragment
-        implements BoxOfficeContract.View, MenuItem.OnActionExpandListener, LoadMoreEventListener, MovieCardClickListener {
 
+public class BoxOfficeFragment extends BaseFragment
+        implements BoxOfficeContract.View, MenuItem.OnActionExpandListener,
+        LoadMoreEventListener, MovieCardClickListener {
+
+    //region Static Properties
     private static final String MOVIE_ID = "movieID";
+    //endregion
 
-    private BoxOfficeContract.Presenter _presenter;
+    //region Properties
+    private BoxOfficeContract.Presenter mPresenter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private boolean IsSearchBarOpen;
-
-
     private MovieCardAdapter mAdapter;
+    //endregion
 
     public BoxOfficeFragment() {
     }
@@ -52,16 +53,11 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Retain the instance of fragment
-        setRetainInstance(true);
-
-
         this.getActivity().invalidateOptionsMenu();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Tell that the fragment handle the toolbar menu
         setHasOptionsMenu(true);
@@ -89,7 +85,7 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
 
         mRecyclerView.addOnScrollListener(listener);
 
-        mAdapter.setListFull(false);
+        mAdapter.setmIsListFull(false);
 
         mAdapter.addLoadingFooter();
 
@@ -99,16 +95,10 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        _presenter.start();
+        mPresenter.start();
     }
 
-
-    @Override
-    public void setPresenter(BaseContract.Presenter presenter) {
-        _presenter = (BoxOfficeContract.Presenter) presenter;
-    }
-
-
+    //region Menu
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -155,15 +145,12 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
 
         super.onPrepareOptionsMenu(menu);
     }
+    //endregion
 
+    //region Contract Implementation
     @Override
-    public void notifyDataLoaded() {
-
-    }
-
-    @Override
-    public void notifyDataRefreshed() {
-
+    public void setPresenter(BaseContract.Presenter presenter) {
+        mPresenter = (BoxOfficeContract.Presenter) presenter;
     }
 
     @Override
@@ -171,67 +158,28 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
         mAdapter.clearList();
     }
 
-    @Override
-    public void setSearchEmpty() {
-
-    }
 
     @Override
-    public void addList(ArrayList arrayList) {
-        mAdapter.addAll(arrayList);
+    public void addList(ArrayList movies) {
+        mAdapter.addAll(movies);
     }
 
     @Override
     public void setListFull() {
-        mAdapter.setListFull(true);
+        mAdapter.setmIsListFull(true);
         mAdapter.removeLoadingFooter();
     }
 
     @Override
     public void setListNotFull() {
-        mAdapter.setListFull(false);
+        mAdapter.setmIsListFull(false);
     }
-
-    private void performSearch(String s) {
-
-        s.trim();
-        if (!s.isEmpty()) {
-            mAdapter.addLoadingFooter();
-            _presenter.onSearch(s);
-        }
-    }
-
-    private void performQuickSearch(String s) {
-        s.trim();
-        if (!s.isEmpty()) {
-            mAdapter.addLoadingFooter();
-            _presenter.onQuickSearch(s);
-        }
-    }
-
-    private void onSearchBarFieldEmpty() {
-        _presenter.onSearchEmpty();
-    }
-
-    @Override
-    public boolean onMenuItemActionCollapse(MenuItem item) {
-        _presenter.onSearchClosed();
-        return true;
-    }
-
-
-    @Override
-    public boolean onMenuItemActionExpand(MenuItem item) {
-        _presenter.onSearchOpen();
-        return true;
-    }
-
 
     @Override
     public void onLoadMoreData() {
 
         if (!mAdapter.getIsListFull()) {
-            _presenter.onLoadMoreData();
+            mPresenter.onLoadMoreData();
         }
     }
 
@@ -246,9 +194,49 @@ public class BoxOfficeFragment extends android.support.v4.app.Fragment
     public void terminateActivity() {
         getActivity().finish();
     }
+    //endregion
+
+    //region Callback Listener
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        mPresenter.onSearchClosed();
+        return true;
+    }
 
     @Override
-    public void movieCardClicked(View v, int position) {
-        _presenter.movieCardClicked(position);
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        mPresenter.onSearchOpen();
+        return true;
     }
+
+    @Override
+    public void movieCardClicked(int position) {
+        mPresenter.movieCardClicked(position);
+    }
+    //endregion
+
+    //region Private Methods
+    private void performSearch(String s) {
+
+       String query =  s.trim();
+        if (!query.isEmpty()) {
+            mAdapter.addLoadingFooter();
+            mPresenter.onSearch(query);
+        }
+    }
+
+    private void performQuickSearch(String s) {
+        String query =  s.trim();
+        if (!query.isEmpty()) {
+            mAdapter.addLoadingFooter();
+            mPresenter.onQuickSearch(query);
+        }
+    }
+
+    private void onSearchBarFieldEmpty() {
+        mPresenter.onSearchEmpty();
+    }
+
+    //endregion
+
 }

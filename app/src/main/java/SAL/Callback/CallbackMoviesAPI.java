@@ -1,9 +1,11 @@
-package com.perrusset.romain.boxotop.UIL.SAL;
+package SAL.Callback;
 
-import com.perrusset.romain.boxotop.UIL.Cast;
-import com.perrusset.romain.boxotop.UIL.Movie;
+import com.perrusset.romain.boxotop.UIL.Model.CastingList;
+import com.perrusset.romain.boxotop.UIL.Model.Movie;
 
 import java.util.ArrayList;
+
+import SAL.ErrorMoviesAPIEnum;
 
 public interface CallbackMoviesAPI {
     void OnError(ErrorMoviesAPIEnum error);
@@ -15,7 +17,7 @@ public interface CallbackMoviesAPI {
 
     interface MovieDetails extends CallbackMoviesAPI{
         void onResultDetailsMovie(Movie movie);
-        void onResultCastListOfMovie(ArrayList<Cast> castList);
+        void onResultCastListOfMovie(CastingList castList);
     }
 
 }

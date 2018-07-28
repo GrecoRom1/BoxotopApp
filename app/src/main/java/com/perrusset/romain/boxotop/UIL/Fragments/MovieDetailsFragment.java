@@ -1,9 +1,9 @@
 package com.perrusset.romain.boxotop.UIL.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,23 +15,27 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.perrusset.romain.boxotop.R;
+import com.perrusset.romain.boxotop.UIL.Model.CastingList;
 import com.perrusset.romain.boxotop.UIL.Contracts.BaseContract;
 import com.perrusset.romain.boxotop.UIL.Contracts.MovieDetailsContract;
-import com.perrusset.romain.boxotop.UIL.Movie;
+import com.perrusset.romain.boxotop.UIL.Model.Movie;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 
+public class MovieDetailsFragment extends BaseFragment
+        implements MovieDetailsContract.View, View.OnClickListener,
+        android.support.design.widget.AppBarLayout.OnOffsetChangedListener {
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsContract.View, View.OnClickListener, android.support.design.widget.AppBarLayout.OnOffsetChangedListener {
-
+    //region Static Properties
     private static final String MOVIE_ID = "movieID";
+    //endregion
 
+    //region Properties
     private int mMovieId;
-    private MovieDetailsContract.Presenter _presenter;
+    private MovieDetailsContract.Presenter mPresenter;
 
-    private CollapsingToolbarLayout collapsingToolbar;
-    private android.support.design.widget.AppBarLayout appBarLayout;
+    private CollapsingToolbarLayout mCollapsingToolbar;
+    private android.support.design.widget.AppBarLayout mAppBarLayout;
 
     private android.support.v7.widget.Toolbar toolbar;
 
@@ -47,6 +51,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     private RatingBar audienceRating;
     private TextView overview;
 
+    //endregion
     public MovieDetailsFragment() {
     }
 
@@ -70,7 +75,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
@@ -79,16 +84,15 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
 
         //Toolbar
 
-        toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.toolbar);
-        //Toolbar.SetOnMenuItemClickListener(this);
+        toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(this);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
 
-        appBarLayout = (android.support.design.widget.AppBarLayout) view.findViewById(R.id.app_bar);
-        collapsingToolbar = view.findViewById(R.id.toolbar_layout);
+        mAppBarLayout = view.findViewById(R.id.app_bar);
+        mCollapsingToolbar = view.findViewById(R.id.toolbar_layout);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        appBarLayout.addOnOffsetChangedListener(this);
+        mAppBarLayout.addOnOffsetChangedListener(this);
 
         //Get all the reference for the view
         image = view.findViewById(R.id.header);
@@ -107,58 +111,60 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsContra
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        _presenter.start();
+        mPresenter.start(mMovieId);
     }
 
     @Override
-    public void notifiyDataMovieLoaded(Movie movie) {
+    public void notifyDataMovieLoaded(Movie movie) {
 
         //Set data to view element
-        collapsingToolbar.setTitle(movie.originalTitle);
-        director.setText("Director (incoming!)");
-        casting.setText("Casting (incoming!)");
-        releaseDate.setText("Release date : " + movie.releaseDate);
-        duration.setText(" Duration : "+movie.getDurationFormattedString());
+        mCollapsingToolbar.setTitle(movie.getTitle());
+        director.setText(R.string.movieDetails_director);
+        casting.setText(R.string.movieDetails_casting);
+
+        String releaseDateString = getString(R.string.movieDetails_releaseDate)
+                + movie.getReleaseDate();
+        releaseDate.setText(releaseDateString);
+
+        String durationString = getString(R.string.movieDetails_duration)
+                + movie.getDurationFormattedString();
+        duration.setText(durationString);
+
         audienceRating.setRating(movie.getVoteAverage());
-        overview.setText(movie.synopsis);
+        overview.setText(movie.getSynopsis());
 
         //Set image
         Picasso.with(getContext()).load(movie.getURLFormattedString()).into(image);
 
-        _presenter.getCastList(mMovieId);
+        mPresenter.getCastList(mMovieId);
     }
 
     @Override
-    public void notifyPresenterReady() {
-        _presenter.getMovieDetails(mMovieId);
-    }
+    public void notifyDataCastLoaded(CastingList listCast) {
 
-    @Override
-    public void notifiyDataCastLoaded(ArrayList listCast) {
+        String castingString = getString(R.string.movieDetails_casting)
+                + listCast.getStringActorList();
+        casting.setText(castingString);
 
+        String directorString = getString(R.string.movieDetails_director)
+                + listCast.getDirectorString();
+        director.setText(directorString);
     }
 
     @Override
     public void setPresenter(BaseContract.Presenter presenter) {
-        _presenter = (MovieDetailsContract.Presenter) presenter;
+        mPresenter = (MovieDetailsContract.Presenter) presenter;
     }
 
     @Override
     public void onClick(View view) {
-
+        getActivity().finish();
     }
 
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-        if (Math.abs(i) > 200) {
-            appBarExpanded = false;
-            toolbar.invalidate();
-        } else {
-            appBarExpanded = true;
-            toolbar.invalidate();
-        }
-
+        toolbar.invalidate(); // update the toolbar
     }
 
     @Override

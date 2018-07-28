@@ -1,4 +1,4 @@
-package com.perrusset.romain.boxotop.UIL.SAL;
+package SAL;
 
 import android.content.Context;
 

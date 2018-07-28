@@ -1,4 +1,4 @@
-package com.perrusset.romain.boxotop.UIL.Presenter;
+package com.perrusset.romain.boxotop.UIL.Presenters;
 
 
 import android.content.Context;
