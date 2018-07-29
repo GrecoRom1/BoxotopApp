@@ -4,7 +4,7 @@
 
 **Boxotop** est une application de test présentant les films au box office.
 
-3 fonctionnalités majeurs ont été développées :
+3 fonctionnalités majeures ont été développées :
 
 - Ecran du **Box Office** (écran par défaut)  listant les films actuellement au cinéma :
 
