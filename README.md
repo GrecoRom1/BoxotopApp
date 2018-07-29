@@ -8,7 +8,7 @@
 
 - Ecran du **Box Office** (écran par défaut)  listant les films actuellement au cinéma :
 
-  ![Box Office List](img_readme/Box Office List.png)
+  ![Box Office List](img_readme/Box_Office_List.png)
 
   
 
@@ -20,7 +20,7 @@
 
 - Ecran de détail de film **Movie Details** donnant le détails d'un film :
 
-![Search](img_readme/Movie Details.png)
+![Search](img_readme/Movie_Details.png)
 
 
 
@@ -30,7 +30,7 @@
 
 J'ai commencé à implémenter une architecture en 4 couches : 
 
-![4 Layers](img_readme/4 Layers.png)
+![4 Layers](img_readme/4_Layers.png)
 
 
 
