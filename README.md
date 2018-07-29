@@ -63,7 +63,7 @@ Pour l'application, j'ai choisis d'implémenter le modèle MVP : **Model View Pr
 
 Pour cette raison le projet sous le dossier UIL est organisé de cette façon : 
 
-- **Model** : un dossier Model se trouve tout le modèle de l'application. Pour le futur, ce modèle sera placé dans la couche **AL** et la couche **SAL, BLL et DAL** auront leur propre modèle.
+- **Model** : il s'agit de la couche **BLL + DAL ou BLL + SAL**. Pour l'instant, la donnée vient seulement depuis la **SAL**. 
 
 - **View** : un dossier *Activité* et un dossier *Fragment*. L'*Activité* n'est qu'un conteneur pour le fragment. Toute la logique de la vue se trouve dans le fragment.
 - **Presenter** : un dossier *Presenter* contient les différents présenteur
@@ -77,7 +77,6 @@ Pour que les communications entre **View** et **Presenteur** se fassent, des *Co
 ### Le choix
 
 Comme je souhaitais afficher le Box Office, j'ai choisis l'API TMDB (The Movie DataBase).
-
 Cette API est plus complète que celle proposée dans le sujet.
 
 ### Implémentation
