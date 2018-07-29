@@ -8,19 +8,19 @@
 
 - Ecran du **Box Office** (écran par défaut)  listant les films actuellement au cinéma :
 
-  ![Box Office List](img_readme\Box Office List.png)
+  ![Box Office List](img_readme/Box Office List.png)
 
   
 
 - Ecran de recherche **Search**. L'utilisateur peu effectuer une recherche de films par titre et obtient le résultat sous forme de liste :
 
-  ![Search](img_readme\Search.png)
+  ![Search](img_readme/Search.png)
 
   
 
 - Ecran de détail de film **Movie Details** donnant le détails d'un film :
 
-![Search](img_readme\Movie Details.png)
+![Search](img_readme/Movie Details.png)
 
 
 
@@ -30,7 +30,7 @@
 
 J'ai commencé à implémenter une architecture en 4 couches : 
 
-![4 Layers](img_readme\4 Layers.png)
+![4 Layers](img_readme/4 Layers.png)
 
 
 
@@ -59,7 +59,7 @@ Dans une version future, je pourrai réaliser les couches manquantes.
 
 Pour l'application, j'ai choisis d'implémenter le modèle MVP : **Model View Presenter** : 
 
-![mvp](img_readme\mvp.png)
+![mvp](img_readme/mvp.png)
 
 Pour cette raison le projet sous le dossier UIL est organisé de cette façon : 
 
