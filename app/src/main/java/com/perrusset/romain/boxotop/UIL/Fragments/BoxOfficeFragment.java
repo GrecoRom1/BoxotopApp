@@ -36,8 +36,6 @@ public class BoxOfficeFragment extends BaseFragment
 
     //region Properties
     private BoxOfficeContract.Presenter mPresenter;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
     private MovieCardAdapter mAdapter;
     //endregion
 
@@ -66,7 +64,7 @@ public class BoxOfficeFragment extends BaseFragment
         View v = inflater.inflate(R.layout.fragment_box_office, container, false);
 
         //Get the recyclerView and set up it
-        mRecyclerView = v.findViewById((R.id.recyclerview_box_office));
+        RecyclerView mRecyclerView = v.findViewById((R.id.recyclerview_box_office));
         mRecyclerView.setHasFixedSize(true);
 
         //set up the adapter
@@ -77,7 +75,7 @@ public class BoxOfficeFragment extends BaseFragment
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // set up the scroll listener to know when to load more data

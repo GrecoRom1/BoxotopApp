@@ -17,7 +17,6 @@ public class MovieDetailsActivity extends BaseActivity {
 
     //region Properties
     private int mMovieID;
-    private MovieDetailsContract.Presenter mPresenter;
 
     //endregion
 
@@ -40,7 +39,7 @@ public class MovieDetailsActivity extends BaseActivity {
 
         if (lFragment == null) {
             lFragment = MovieDetailsFragment.newInstance(mMovieID);
-            mPresenter = new MovieDetailsPresenter(this, lFragment);
+            MovieDetailsContract.Presenter mPresenter = new MovieDetailsPresenter(this, lFragment);
             lFragment.setPresenter(mPresenter);
 
             startFragment(R.id.fragment, lFragment);
