@@ -6,7 +6,7 @@ import com.perrusset.romain.boxotop.UIL.Model.CastingList;
 import com.perrusset.romain.boxotop.UIL.Contracts.MovieDetailsContract;
 import com.perrusset.romain.boxotop.UIL.Model.Movie;
 
-import SAL.Callback.CallbackMoviesAPI;
+import BLL.Callback.CallbackMoviesAPI;
 import SAL.ErrorMoviesAPIEnum;
 import SAL.MoviesAPI;
 

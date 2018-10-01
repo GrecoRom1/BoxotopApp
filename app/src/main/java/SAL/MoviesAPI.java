@@ -8,7 +8,10 @@ import com.perrusset.romain.boxotop.UIL.Model.CastingList;
 import com.perrusset.romain.boxotop.UIL.Model.Movie;
 import com.perrusset.romain.boxotop.UIL.Model.MovieList;
 
-import SAL.Callback.CallbackMoviesAPI;
+import java.util.ArrayList;
+import java.util.List;
+
+import BLL.Callback.CallbackMoviesAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +25,10 @@ public class MoviesAPI {
     }
 
     //region Box Office
-    public void getPopularMovie(final int page, final CallbackMoviesAPI.BoxOffice callback) {
+    public ArrayList<Movie> getMoviesBoxOffice(final int page) {
+
+        final ArrayList<Movie> resultList = new ArrayList<>();
+
         GetDataService service = RetrofitClientInstance.getRetrofitInstance(mContext).create(GetDataService.class);
 
         // Call the method with parameter in the interface to get the notice data
@@ -34,14 +40,16 @@ public class MoviesAPI {
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(@NonNull Call<MovieList> call, @NonNull Response<MovieList> response) {
-                callback.onResultBoxOffice(response.body().getMovieArrayList(), page);
+                resultList.addAll(response.body().getMovieArrayList());
             }
 
             @Override
             public void onFailure(@NonNull Call<MovieList> call, @NonNull Throwable t) {
-                //todo callback.OnError(ErrorMoviesAPIEnum.SearchEmpty);
+                resultList.clear();
             }
         });
+
+        return resultList;
     }
 
 

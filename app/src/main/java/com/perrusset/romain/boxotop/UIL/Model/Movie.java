@@ -1,13 +1,20 @@
 package com.perrusset.romain.boxotop.UIL.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Entity
 public class Movie {
 
+    @NonNull
+    @PrimaryKey
     @SerializedName("id")
     private int id;
 
@@ -18,7 +25,7 @@ public class Movie {
     private String originalTitle;
 
     @SerializedName("release_date")
-    private Date releaseDate;
+    private String releaseDate;
 
     @SerializedName("overview")
     private String synopsis;
@@ -58,12 +65,12 @@ public class Movie {
 
     public String getReleaseDate() {
 
-        SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");
-        return df.format(releaseDate);
+        return releaseDate;
     }
 
     public void setReleaseDate(String releaseDate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy");
 
         Date date = null;
         try {
@@ -72,7 +79,7 @@ public class Movie {
             e.printStackTrace();
         }
 
-        this.releaseDate = date;
+        this.releaseDate = df.format(releaseDate);
     }
 
     public String getSynopsis() {

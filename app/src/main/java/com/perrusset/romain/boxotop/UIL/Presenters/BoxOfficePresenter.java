@@ -9,7 +9,8 @@ import com.perrusset.romain.boxotop.UIL.Model.Movie;
 
 import java.util.ArrayList;
 
-import SAL.Callback.CallbackMoviesAPI;
+import BLL.Callback.CallbackMoviesAPI;
+import BLL.MovieBLL;
 import SAL.ErrorMoviesAPIEnum;
 import SAL.MoviesAPI;
 
@@ -76,7 +77,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     }
 
     private void loadMoreBoxOffice() {
-        _moviesAPI.getPopularMovie(pageBoxOffice, this);
+        MovieBLL.getMoviesBoxOffice(mContext, pageBoxOffice, this);
     }
 
     private void loadMoreSearch() {
