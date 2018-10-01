@@ -24,7 +24,7 @@
                 android:id="@+id/textView_director" />
             <TextView
                 style="@style/TextView_MovieDetails.Duration"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:id="@+id/textView_duration" />
             <TextView
                 style="@style/TextView_MovieDetails.Casting"

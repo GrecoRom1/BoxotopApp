@@ -16,7 +16,6 @@ public class MovieDetailsPresenter extends BasePresenter implements MovieDetails
     private boolean isInitialized;
 
     private MoviesAPI _moviesAPI;
-    private int mMovieID;
 
 
     public MovieDetailsPresenter(Context c, MovieDetailsContract.View view) {
@@ -34,7 +33,6 @@ public class MovieDetailsPresenter extends BasePresenter implements MovieDetails
         if (!isInitialized) {
             isInitialized = true;
             _moviesAPI = new MoviesAPI(mContext);
-            mMovieID = movieId;
             getMovieDetails(movieId);
         }
     }

@@ -35,7 +35,6 @@ public class MovieDetailsFragment extends BaseFragment
     private MovieDetailsContract.Presenter mPresenter;
 
     private CollapsingToolbarLayout mCollapsingToolbar;
-    private android.support.design.widget.AppBarLayout mAppBarLayout;
 
     private android.support.v7.widget.Toolbar toolbar;
 
@@ -88,7 +87,7 @@ public class MovieDetailsFragment extends BaseFragment
         toolbar.setNavigationOnClickListener(this);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
 
-        mAppBarLayout = view.findViewById(R.id.app_bar);
+        AppBarLayout mAppBarLayout = view.findViewById(R.id.app_bar);
         mCollapsingToolbar = view.findViewById(R.id.toolbar_layout);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
