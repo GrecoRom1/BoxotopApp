@@ -87,7 +87,6 @@ public class BoxOfficeFragment extends BaseFragment
 
         mAdapter.setmIsListFull(false);
 
-        mAdapter.addLoadingFooter();
 
         return v;
     }

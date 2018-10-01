@@ -123,7 +123,7 @@ public class MovieCardAdapter extends RecyclerView.Adapter<MovieCardAdapter.View
     //region Methods Manage Dataset
     private void addItem(Movie item) {
         mDataset.add(item);
-        notifyItemInserted(mDataset.size() - 1);
+        notifyItemInserted(mDataset.size() );
         notifyDataSetChanged();
     }
 

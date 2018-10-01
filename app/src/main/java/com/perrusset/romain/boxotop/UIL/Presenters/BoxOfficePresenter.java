@@ -59,6 +59,7 @@ public class BoxOfficePresenter extends BasePresenter implements BoxOfficeContra
     @Override
     public void onRefresh() {
         pageBoxOffice = 1;
+        onLoadMoreData();
         // future implementation
     }
 
